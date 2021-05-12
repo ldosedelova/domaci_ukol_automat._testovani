@@ -27,11 +27,19 @@ public class TestyPrihlasovaniNaKurzy {
         prohlizec.navigate().to("https://cz-test-jedna.herokuapp.com/");
         WebElement tlacitkoPrihlaseni = prohlizec.findElement(By.xpath("//a[@href = 'https://cz-test-jedna.herokuapp.com/prihlaseni']" ));
         tlacitkoPrihlaseni.click();
+        String uzivatelskeJmeno = "Josef Novak";
+        prihlaseniUzivatele("PepaN@acc.com","12345PepaN");
 
-        assertujSpravnePrihlaseniUzivatele("Josef Novak","PepaN@acc.com","12345PepaN");
+        WebElement prihlasenSpravnyUzivatel = prohlizec.findElement(By.xpath("//a[@class='dropdown-toggle']"));
+        String spravnyUzivatel = prihlasenSpravnyUzivatel.getText();
+        Assertions.assertEquals(uzivatelskeJmeno, spravnyUzivatel);
+
+        WebElement prihlasen = prohlizec.findElement(By.xpath("//span[text()='Přihlášen']"));
+        String poPrihlaseni = prihlasen.getText();
+        Assertions.assertEquals("Přihlášen", poPrihlaseni);
     }
 
-    private void assertujSpravnePrihlaseniUzivatele(String jmenoUzivatele, String emailUzivatele, String hesloUzivatele) {
+    private void prihlaseniUzivatele( String emailUzivatele, String hesloUzivatele) {
         WebElement poleEmail = prohlizec.findElement(By.id("email"));
         poleEmail.sendKeys(emailUzivatele);
         WebElement poleHeslo = prohlizec.findElement(By.id("password"));
@@ -39,13 +47,6 @@ public class TestyPrihlasovaniNaKurzy {
         WebElement tlacitkoPrihlasit = prohlizec.findElement(By.xpath("//button[@type = 'submit']"));
         tlacitkoPrihlasit.click();
 
-        WebElement prihlasen = prohlizec.findElement(By.xpath("//span[text()='Přihlášen']"));
-        String poPrihlaseni = prihlasen.getText();
-        Assertions.assertEquals("Přihlášen", poPrihlaseni);
-
-        WebElement prihlasenSpravnyUzivatel = prohlizec.findElement(By.xpath("//a[@class='dropdown-toggle']"));
-        String spravnyUzivatel = prihlasenSpravnyUzivatel.getText();
-        Assertions.assertEquals(jmenoUzivatele, spravnyUzivatel);
     }
 
     @Test
@@ -54,7 +55,7 @@ public class TestyPrihlasovaniNaKurzy {
 
         vyberKurzu(2,0);
 
-        assertujSpravnePrihlaseniUzivatele("Josef Novak","PepaN@acc.com","12345PepaN");
+        prihlaseniUzivatele("PepaN@acc.com","12345PepaN");
 
         assertujVytvoreniPrihlasky("Ferda", "Novak", "12.3.2010");
 
@@ -99,9 +100,8 @@ public class TestyPrihlasovaniNaKurzy {
         tlacitkoVytvoritPrihlasku.click();
 
 
-        WebElement vytvorenaPrihlaska = prohlizec.findElement(By.xpath("//span[@class='breadcrumb-item active']"));
-        String VytvorenaPrihlaskaJmeno =  vytvorenaPrihlaska.getText();
-        Assertions.assertEquals(jmenoDitete + " " + prijmeniDitete, VytvorenaPrihlaskaJmeno);
+        WebElement vytvorenaPrihlaska = prohlizec.findElement(By.xpath("//a[@title = 'Stáhnout potvrzení o přihlášení']"));
+        Assertions.assertNotNull(vytvorenaPrihlaska);
 
     }
 
@@ -112,7 +112,7 @@ public class TestyPrihlasovaniNaKurzy {
         WebElement tlacitkoPrihlaseni = prohlizec.findElement(By.xpath("//a[@href = 'https://cz-test-jedna.herokuapp.com/prihlaseni']" ));
         tlacitkoPrihlaseni.click();
 
-        assertujSpravnePrihlaseniUzivatele("Josef Novak","PepaN@acc.com","12345PepaN");
+        prihlaseniUzivatele("PepaN@acc.com","12345PepaN");
 
         WebElement tlacitkologoDomu= prohlizec.findElement(By.xpath("//a/img[@alt ='Domů']" ));
         tlacitkologoDomu.click();
@@ -127,7 +127,7 @@ public class TestyPrihlasovaniNaKurzy {
         prohlizec.navigate().to("https://cz-test-jedna.herokuapp.com/");
         WebElement tlacitkoPrihlaseni = prohlizec.findElement(By.xpath("//a[@href = 'https://cz-test-jedna.herokuapp.com/prihlaseni']" ));
         tlacitkoPrihlaseni.click();
-        assertujSpravnePrihlaseniUzivatele("Josef Novak","PepaN@acc.com","12345PepaN");
+        prihlaseniUzivatele("PepaN@acc.com","12345PepaN");
 
 
         WebElement tlacitkoVytvoritNovouPrihlasku = prohlizec.findElement(By.xpath("//a[@class ='btn btn-sm btn-info']"));
